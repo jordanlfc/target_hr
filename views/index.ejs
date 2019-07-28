@@ -1,0 +1,100 @@
+<%include partials/head.ejs%>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light custom-bar">
+            <!-- <a class="navbar-brand" href="/"><img src="images/logo.png" alt=""></a> -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav navbar-nav-custom">
+                    <li class="nav-item active m-4">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item m-4">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item m-4">
+                        <a class="nav-link" href="#">Jobs</a>
+                    </li>
+                    <li class="nav-item m-4">
+                        <a class="nav-link" href="#">Blog</a>
+                    </li>
+                    <li class="nav-item m-4">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div id="cover" class="">
+    </div>
+
+
+    <section id="landingPage">
+        <div class="row" id="landingBrand">
+            <div class="col-12" style="z-index: 300">
+                <div id="landingImgContainer" class="d-flex justify-content-center">
+                    <img src="images/logo.png" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div id="landingCards" class="container d-flex justify-content-around">
+            <div class="row" style="width:100%">
+                <div class="col-sm-12 col-lg-6">
+                    <div class="card custom-card">
+                        <div class="card-header text-black">
+                            Latest Jobs
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title mb-5 text-black">Subscribe to our latest jobs</h4>
+
+
+                            <form class="mb-2 row justify-content-around change-form" action="/subscribe">
+                                <input class="form-control form-control-custom mb-3 col-5 " type="text" name="fullname"
+                                    id="fullname" placeholder="Full Name">
+                                <input class="form-control form-control-custom mb-3 col-5" type="email" name="email"
+                                    id="email" placeholder="E-Mail">
+                            </form>
+                            <a href="#" class="btn btn-primary btn-custom mt-4">Subscribe</a>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-lg-6">
+                    <div class="card custom-card">
+                        <div class="card-header text-black">
+                            Latest Blog Post
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title mb-5 text-black"><a class="text-black" href="#">Blog Title</h4>
+                            </a>
+
+                            <p class="margin-b-2 text-black">Tagline or first line of the blog</p>
+
+
+                            <a href="#" class="btn btn-primary btn-custom mt-4">Blog</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+    <%include partials/scripts%>
+
+</body>
+
+</html>
