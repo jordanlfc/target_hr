@@ -8,13 +8,44 @@
     --ui-logo-gray :#808080;
     --ui-gray:#8f9ca4;
     --ui-white: #f4f3f3;
-};
+}
+
+
+.about-type1{
+    background-color: var(--ui-logo-green) !important
+}
+
+.acctitle{
+    background-color: var(--ui-logo-gray) !important;
+    color: var(--ui-white);
+
+}
+
+a, li {
+    text-decoration: none !important
+}
+
+ul{
+    list-style-type: none;
+}
 
 
 #about-img{
     height:100%;
 }
 
+.blog-box{
+    background:red;
+    height: 100%;
+}
+
+.blog-section-box{
+    height: 100vh;
+}
+
+.card{
+    box-shadow: 0 0.4rem 0.7rem 0.4rem rgba(0,169,157,.25);
+}
 
 .card-body a {
     color: var(--ui-black) !important;
@@ -23,6 +54,10 @@
 .card-body a:hover {
     text-decoration: none !important;
     color: var(--ui-logo-green) !important;
+}
+
+.content-box{
+    border: 1px solid var(--ui-logo-green)
 }
 
 a img {
@@ -56,9 +91,8 @@ a img {
 
 .custom-bar{
     min-height: 6em;
-    background-color: transparent;
+    background-color: transparent !important;
     z-index: 2;
-    background-color: rgba(128,128,128,.15); 
     border-bottom: 2px solid var(--ui-logo-green)
 }
 
@@ -70,13 +104,39 @@ a img {
     
 }
 
-.form-control:focus{
+#first-about{
+    height: 80vh;
+}
+
+.form-control1:focus{
     box-shadow: 0 0.4rem 0.7rem 0.4rem rgba(0,169,157,.25);
     border:none;
 }
 
 .form-control-custom{
     border-radius: 0
+}
+
+
+.jobs-table{
+    background-color: var(--ui-white) !important
+}
+
+#jobs-image-table{
+    background-size: contain;
+    background-position: center;
+}
+
+#job-single-section, #blog-section{
+    background-color: var(--ui-white) !important;
+    height:auto;
+    overflow: hidden;
+
+}
+
+#job-single-box{
+    height: 80vh;
+    width:75%;
 }
 
 
@@ -108,13 +168,17 @@ a img {
     overflow: hidden;
 }
 
+.layer {
+    background-color: rgba(0, 169, 157,0.3);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
 
-#top-about{
-    min-height: 100vh;
-    text-align: center;
-    background: rgb(0,169,157);
-background: linear-gradient(90deg, rgba(0,169,157,1) 26%, rgba(128,128,128,0.3702031154258579) 56%);
-    
+
+.top-about{
+    background-color: var(--ui-white) !important;
 }
 
 .margin-b-2{
@@ -129,6 +193,10 @@ background: linear-gradient(90deg, rgba(0,169,157,1) 26%, rgba(128,128,128,0.370
 
 .text-black{
     color: var(--ui-black) !important;
+}
+
+.text-white{
+    color: var(--ui-white);
 }
 
 .text-logo{

@@ -102,13 +102,46 @@ app.get('/', (req, res) => {
 
     res.render('index')
 
-})
+});
+
 
 app.get('/about', (req, res) => {
 
     res.render('about')
 
-})
+});
+
+app.get('/jobs', (req, res) => {
+
+    res.render('jobs')
+
+});
+app.get('/jobs-single', (req, res) => {
+
+    res.render('jobs-single')
+
+});
+
+
+
+app.get('/blog', (req, res) => {
+
+    res.render('blog')
+
+});
+
+app.get('/contact', (req, res) => {
+
+    res.render('contact')
+
+});
+
+app.get('/contact', (req, res) => {
+
+    res.render('contact')
+
+});
+
 
 
 
