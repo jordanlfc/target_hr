@@ -34,16 +34,21 @@ ul{
     height:100%;
 }
 
-.blog-box{
-    background:red;
-    height: 100%;
+.background-green{
+    background-color: var(--ui-logo-green) !important
 }
 
-.blog-section-box{
-    height: 100vh;
+.button-margin{
+    margin-right:auto;
+    margin-left:1em;
 }
 
-.card{
+.btn-success-custom{
+    background-color: var(--ui-logo-green)
+}
+
+
+.shadow-card{
     box-shadow: 0 0.4rem 0.7rem 0.4rem rgba(0,169,157,.25);
 }
 
@@ -64,6 +69,16 @@ a img {
     width: 16em;
 }
 
+.blog-box{
+    height:100vh
+}
+
+#blog-section{
+    background-color: var(--ui-logo-green) !important;
+    height:auto;
+    overflow: hidden;
+}
+
 .btn-custom{
     background-color: var(--ui-logo-green);
     border:none;
@@ -74,6 +89,8 @@ a img {
 .change-form {
     margin-left:-20px
 }
+
+
 
 #cover {
 
@@ -127,12 +144,12 @@ a img {
     background-position: center;
 }
 
-#job-single-section, #blog-section{
+#job-single-section {
     background-color: var(--ui-white) !important;
     height:auto;
     overflow: hidden;
-
 }
+
 
 #job-single-box{
     height: 80vh;
@@ -182,13 +199,17 @@ a img {
 }
 
 .margin-b-2{
-    margin-bottom: 2.35em
+    margin-bottom: 1.9em
 }
 
 
 .navbar-nav-custom{
     font-size: 1.3em;
     margin-left: auto
+}
+
+.standard-background{
+    background-color:var(--ui-white) !important;
 }
 
 .text-black{

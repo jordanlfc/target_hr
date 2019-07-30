@@ -1,0 +1,77 @@
+<%include partials/head1.ejs %>
+
+<%include partials/navbar.ejs %>
+
+<body>
+    
+
+<section id="content" class="standard-background">
+	
+        <div class="row justify-content-center p-5">
+            <div class="col-lg-7 col-md-10">
+
+                
+                    <% if(error && error.length > 0) { %>
+				
+                        <div class='alert alert-danger' role='alert'>
+                            <%= error %>
+                        </div>
+                        <% } %>
+                        <% if(success && success.length > 0) { %>
+                        <div class='alert alert-success' role='alert'>
+                            <%= success %>
+                        </div>
+                    
+                    <% } %>
+
+                <div class="form-result"></div>
+
+                <div class="form-process css3-spinner">
+                    <div class="css3-spinner-double-bounce1"></div>
+                    <div class="css3-spinner-double-bounce2"></div>
+                </div>
+                <form method="post" action="/new-job">
+                    <div class="form-group">
+                        <label>Start date</label>
+                        <input type="text" class="form-control" name="start_date">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Job Title</label>
+                        <input type="text" class="form-control" name="job_title">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" name="description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" class="form-control" name="location">
+                    </div>
+                    <div class="form-group">
+                        <label>Salary</label>
+                        <input type="text" class="form-control" name="salary">
+                    </div>
+                    <div class="form-group">
+                        <label>Job Type</label>
+                        <input type="text" class="form-control" name="type">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact</label>
+                        <input type="text" class="form-control" name="contact">
+                    </div>
+                    <input type="submit" class="btn btn-success-custom" value="Submit" name="submit">
+                    <a class ="btn btn-warning" href="/admin">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<%include partials/footer.ejs %>
+
+<%include partials/scripts.ejs %>
+
+</body>
