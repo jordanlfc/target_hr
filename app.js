@@ -97,7 +97,7 @@ var storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
-}).array('files[]', 2);
+}).single('file');
 
 
 
@@ -162,6 +162,8 @@ app.get('/jobs-single:id', (req, res) => {
 
 
 });
+
+
 app.get('/jobs-post', (req, res) => {
 
     res.render('postjob')
@@ -205,9 +207,29 @@ app.get('/blog', (req, res) => {
 
 app.get('/blog_:id', (req, res) => {
 
-    res.render('blog-single')
+    let iD = req.params.id
+
+    let sql = `
+    SELECT * FROM
+    blog 
+    WHERE id = ? 
+    `
+
+    connection.query(sql, iD, (err, found) => {
+        if (err) {
+            req.flash('error', 'something went wrong')
+            res.redirect('back')
+        } else if (!found[0]) {
+            req.flash('error', 'something went wrong')
+            res.redirect('/')
+        } else {
+            res.render('blog-single', { blog: found })
+        }
+    })
+
 
 });
+
 
 
 
@@ -333,7 +355,38 @@ app.post('/edit-jobs:id', (req, res) => {
 
 
 app.post('/blog-post', upload, (req, res, err) => {
-    res.send(req.files)
+
+    let addToDatabase = (sql,data) => {
+        connection.query(sql,data,(err,result) => {
+            if(err){
+                return(
+                req.flash('error','something went wrong'),
+                res.redirect('back')
+                )
+            }
+            req.flash('success','Blog post completed')
+            res.redirect('back')
+        })
+    }
+
+    let sql = `
+    INSERT INTO
+    blog(post_title,post_title2,picture_path,content_path,content_data)
+    VALUES(?,?,?,?,?)
+    `
+
+    if(!req.file){
+        let data = [
+            req.body.blog_title, req.body.blog_tagline, null, req.body.content,req.body.author
+        ]
+        addToDatabase(sql,data)
+    } else {
+        console.log(req.file)
+        let data = [
+            req.body.blog_title, req.body.blog_tagline, req.file.path, req.body.content,req.body.author
+        ]
+        addToDatabase(sql,data)
+    }
 });
 
 
