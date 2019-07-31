@@ -120,12 +120,47 @@ app.get('/about', (req, res) => {
 
 app.get('/jobs', (req, res) => {
 
-    res.render('jobs')
+
+    let sql = `
+    SELECT * FROM
+    jobs 
+    `
+
+    connection.query(sql, (err, found) => {
+        if (err) {
+            req.flash('error', 'something went wrong')
+            res.redirect('back')
+        } else if (!found[0]) {
+            req.flash('error', 'something went wrong')
+            res.redirect('/')
+        } else {
+            res.render('jobs', { job: found })
+        }
+    })
 
 });
 app.get('/jobs-single:id', (req, res) => {
 
-    res.render('jobs-single')
+    let iD = req.params.id
+
+    let sql = `
+    SELECT * FROM
+    jobs 
+    WHERE id = ? 
+    `
+
+    connection.query(sql, iD, (err, found) => {
+        if (err) {
+            req.flash('error', 'something went wrong')
+            res.redirect('back')
+        } else if (!found[0]) {
+            req.flash('error', 'something went wrong')
+            res.redirect('/')
+        } else {
+            res.render('jobs-single', { job: found })
+        }
+    })
+
 
 });
 app.get('/jobs-post', (req, res) => {
