@@ -2,15 +2,14 @@ const express = require("express"),
     app = express(),
     methodOverride = require("method-override"),
     bodyParser = require("body-parser"),
-    CookieParser = require('cookie-parser'),
     multer = require('multer'),
     cookieSession = require('cookie-session'),
     passport = require('passport'),
     mysql = require('mysql'),
     uploader = multer(),
-    withcv = uploader.single('cvfile'),
+    withcv = uploader.single('file'),
     nodemailer = require("nodemailer");
-async = require("async"),
+    async = require("async"),
     crypto = require("crypto"),
     bcrypt = require('bcrypt-nodejs'),
     flash = require("connect-flash");
@@ -88,17 +87,17 @@ function isLoggedIn(req, res, next) {
 //multer engine
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, '/images/')
+        cb(null, 'public/uploads/')
     },
     filename: function (req, file, cb) {
-        cb(null, req.user.id + file.originalname)
+        cb(null, file.originalname)
     },
 
 })
 
 const upload = multer({
     storage: storage,
-}).single('display');
+}).array('files[]', 2);
 
 
 
@@ -225,6 +224,11 @@ app.get('/contact', (req, res) => {
 });
 
 
+app.get('/blog-post', (req,res) => {
+    res.render('blogpost')
+})
+
+
 //post requests 
 
 
@@ -317,11 +321,126 @@ app.post('/edit-jobs:id', (req, res) => {
         req.flash('success', 'Job Posted')
         res.redirect('/admin')
     })
-
 })
 
 
 
+// app.post('/blog-post', (req,res) => {
+
+//     res.send(req.body)
+
+// })
+
+
+app.post('/blog-post', upload, (req, res, err) => {
+    res.send(req.files)
+});
+
+
+
+app.post('/vid', (req, res) => {
+    upload2(req, res, (err) => {
+        if (err) {
+            res.redirect('back')
+        } else {
+            let sql = `UPDATE users 
+            SET 
+            video_path = ?
+            WHERE id = ?`;
+
+            let data = [
+                req.file.path, req.user.id
+            ];
+
+            // execute the UPDATE statement
+            connection.query(sql, data, (err, results) => {
+                if (err) {
+                    res.send(err);
+                }
+                res.redirect('back')
+            })
+        }
+    })
+});
+
+
+
+
+
+
+
+
+
+
+
+
+app.post('/apply', withcv, (req, res) => {
+
+    if(!req.file){
+        return(
+            req.flash('error', 'You must upload your résumé'),
+            res.redirect('back')
+        )
+    }
+
+    const cv = req.file;
+    console.log(cv)
+
+
+    const output = `
+    <p>You have a new cv from '${req.body.name} </p>
+    <h3>Contact Details<h3>
+    <ul>
+        <li>Name: ${req.body.name}</li>
+        <li>Email: ${req.body.email}</li>
+        <li>Number: ${req.body.phone}</li>
+        <li>City: ${req.body.locations}</li>
+    <ul>
+    
+    `
+
+    console.log(output)
+
+    async function main() {
+
+        let transporter = nodemailer.createTransport({
+            host: "az1-ss22.a2hosting.com",
+            port: 465,
+            secure: true, 
+            auth: {
+                user: 'mailer@targeted-hr.com', 
+                pass: 'admin1289' 
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+
+        console.log('this far')
+
+        
+        let info = await transporter.sendMail({
+            from: `<${req.body.email}>`,
+            to: "admin@targeted-hr.com",
+            subject: `Application - ${req.body.job_title}`,
+            cc: `${req.file.filename}`,
+            html: output,
+            attachments: [{
+                filename: cv.originalname,
+                contentType: cv.mimetype,
+                encoding: cv.encoding,
+                content: cv.buffer
+            }]
+
+        });
+
+
+    }
+    main().catch(console.error);
+    req.flash('success', 'Message Sent')
+    res.redirect('back')
+
+});
 
 
 

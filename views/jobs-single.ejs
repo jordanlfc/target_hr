@@ -2,6 +2,9 @@
 
 <body>
 
+
+
+
     <header>
         <% include partials/navbar.ejs %>
 
@@ -9,8 +12,22 @@
 
     <section id="job-single-section">
         <div class="row justify-content-center p-2">
+            
             <div class="col-10 justify-content-center d-flex p-3">
+
                 <div id="job-single-box">
+                        <% if(error && error.length > 0) { %>
+				
+                            <div class='alert alert-danger' role='alert'>
+                                <%= error %>
+                            </div>
+                            <% } %>
+                            <% if(success && success.length > 0) { %>
+                            <div class='alert alert-success' role='alert'>
+                                <%= success %>
+                            </div>
+                        
+                        <% } %>
                     <h1><%=job[0].job_title%> - <%=job[0].job_location%> - <%=job[0].job_salary%></h1>
                     <h2><%=job[0].start_date%></h2>
                     <h3><%=job[0].job_type%></h3>
@@ -18,9 +35,113 @@
 
 
                     <p><%=job[0].contact%></p>
+                    <a href="#" data-toggle="modal" data-target="#contactFormModal" class="btn btn-lg about-type1" style="border-radius:0">Apply</a>
                 </div>
             </div>
         </div>
     </section>
+
+
+    <!-- Modal Contact Form
+							============================================= -->
+						
+
+							<div class="modal fade" id="contactFormModal" tabindex="-1" role="dialog" aria-labelledby="contactFormModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="contactFormModalLabel">Apply</h4>
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+										</div>
+										<div class="modal-body">
+
+											<div class="form-widget">
+												<div class="form-result"></div>
+												<form class="nobottommargin" id="template-contactform" name="template-contactform" action="/apply" method="post" enctype="multipart/form-data">
+
+													<div class="form-process"></div>
+
+													<div class="col_half">
+														<label for="name">Name <small>*</small></label>
+														<input type="text" id="name" name="name" value="" class="sm-form-control required" />
+													</div>
+
+													<div class="col_half col_last">
+														<label for="email">Email <small>*</small></label>
+														<input type="email" id="email" name="email" value="" class="required email sm-form-control" />
+													</div>
+
+													<div class="clear"></div>
+
+													<div class="col_half">
+														<label for="phone">Phone</label>
+														<input type="text" id="phone" name="phone" value="" class="sm-form-control" />
+													</div>
+													<div class="clear"></div>
+
+													<div class="col_full">
+														<label for="position">Position</label>
+														<input type="text" id ="position" name="position" value="<%=job[0].job_title%>" class="required sm-form-control" disabled />
+													</div>
+													<div class="col_full">
+														<label for="Location">Location <small>*</small></label>
+														<input type="text" id="Location" name="Location" value="" class="required sm-form-control" />
+													</div>
+													<div class="col_full">
+														<label for="available">Available from: <small>*</small></label>
+														<input type="text" id="available" name="available" value="" class="required sm-form-control" />
+													</div>
+
+													<div class="col_full">
+														<label for="message">Message <small>*</small></label>
+														<textarea class="required sm-form-control" id="message" name="message" rows="6" cols="30"></textarea>
+													</div>
+
+													<div class="col_half">
+														<label for="message">Upload CV <small>*</small></label>
+														<input type="file" id="file" name="file" value="" class="required sm-form-control" />
+													</div>
+													
+
+													<div class="col_full">
+														<button class="button button-3d nomargin" type="submit" id="submit" name="submit" value="submit">Send Message</button>
+													</div>
+
+													<input type="hidden" name="prefix" value="">
+
+												</form>
+
+											</div>
+
+
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+										</div>
+									</div><!-- /.modal-content -->
+								</div><!-- /.modal-dialog -->
+							</div><!-- /.modal -->
+							<!-- Modal Contact Form End -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%include partials/scripts%>
 
 </body>
