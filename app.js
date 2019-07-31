@@ -18,6 +18,8 @@ const express = require("express"),
 //port 
 const port = process.env.PORT || 45000;
 
+require('./config/passport')(passport);
+
 //database 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -100,6 +102,8 @@ const upload = multer({
 }).single('file');
 
 
+
+require('./routes/routes.js')(app, passport);
 
 
 
@@ -248,6 +252,10 @@ app.get('/contact', (req, res) => {
 
 app.get('/blog-post', (req,res) => {
     res.render('blogpost')
+})
+
+app.get('/login', (req,res) => {
+    res.render('login')
 })
 
 

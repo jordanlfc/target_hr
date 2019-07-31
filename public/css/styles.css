@@ -232,3 +232,7 @@ ul li a:hover{
     color: var(--ui-logo-green) !important;
     font-weight: 600;
 }
+
+.white-space-pre {
+    white-space: pre-wrap;
+}
