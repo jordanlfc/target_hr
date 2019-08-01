@@ -117,7 +117,7 @@ app.get('/', (req, res) => {
             req.flash('error', 'something went wrong')
             res.redirect('back')
         } else if (!found[0]) {
-            res.render('index', {blog:[]})
+            res.render('index', { blog: [] })
         } else {
             console.log(found)
             res.render('index', { blog: found })
@@ -126,7 +126,7 @@ app.get('/', (req, res) => {
 
 });
 
-app.get('/admin', (req, res) => {
+app.get('/admin', isLoggedIn,(req, res) => {
 
 
     let sql = `
@@ -138,38 +138,38 @@ app.get('/admin', (req, res) => {
     blog
     `
 
-    function blogFind(x){
-        connection.query(x, (err,found2) => {
-            if(err){
-            req.flash('error', 'something went wrong')
-            res.redirect('back')
-            } else if(!found2[0]){
+    function blogFind(x) {
+        connection.query(x, (err, found2) => {
+            if (err) {
+                req.flash('error', 'something went wrong')
+                res.redirect('back')
+            } else if (!found2[0]) {
                 res.render('admin', {
-                    blog:[],
-                    job:[]
+                    blog: [],
+                    job: []
                 })
             } else {
                 res.render('admin', {
-                    blog:found2,
-                    job:[]
+                    blog: found2,
+                    job: []
                 })
             }
         })
     }
-    function blogFind2(x,y){
-        connection.query(x, (err,found2) => {
-            if(err){
-            req.flash('error', 'something went wrong')
-            res.redirect('back')
-            } else if(!found2[0]){
+    function blogFind2(x, y) {
+        connection.query(x, (err, found2) => {
+            if (err) {
+                req.flash('error', 'something went wrong')
+                res.redirect('back')
+            } else if (!found2[0]) {
                 res.render('admin', {
-                    blog:[],
-                    job:y
+                    blog: [],
+                    job: y
                 })
             } else {
                 res.render('admin', {
-                    blog:found2,
-                    job:y
+                    blog: found2,
+                    job: y
                 })
             }
         })
@@ -183,10 +183,15 @@ app.get('/admin', (req, res) => {
         } else if (!found[0]) {
             blogFind(sql2)
         } else {
-            blogFind2(sql2,found)
+            blogFind2(sql2, found)
         }
     })
 });
+
+
+app.get('/new-admin', (req,res) => {
+    res.render('newadmin')
+})
 
 
 
@@ -214,8 +219,7 @@ app.get('/jobs', (req, res) => {
             req.flash('error', 'something went wrong')
             res.redirect('back')
         } else if (!found[0]) {
-            req.flash('error', 'something went wrong')
-            res.redirect('/')
+            res.render('jobs', { job: [] })
         } else {
             res.render('jobs', { job: found })
         }
@@ -297,8 +301,7 @@ app.get('/blog', (req, res) => {
             req.flash('error', 'something went wrong')
             res.redirect('back')
         } else if (!found[0]) {
-            req.flash('error', 'something went wrong')
-            res.redirect('/')
+            res.render('blog', { blogs: [] })
         } else {
             res.render('blog', { blogs: found })
         }
@@ -427,15 +430,19 @@ app.post('/new-job', isLoggedIn, (req, res) => {
         req.body.contact
     ]
 
+    let mailTitle = data[0]
+
     connection.query(sql, data, (err, result) => {
         if (err) {
             req.flash('error', 'Post failed, please try again')
             res.redirect('back')
         }
-        console.log(result)
-        req.flash('success', 'Job Posted')
-        res.redirect('back')
+
     })
+
+    subMailer(mailTitle)
+    req.flash('success', 'Job Posted')
+    res.redirect('back')
 })
 
 app.post('/edit-jobs:id', isLoggedIn, (req, res) => {
@@ -536,7 +543,7 @@ app.post('/blog-edit:id', isLoggedIn, upload, (req, res, err) => {
             post_title = ?, post_title2 = ?, content_path = ?, content_data = ?
             WHERE id = ?`;
         let data = [
-            req.body.blog_title, req.body.tagline, req.body.content, req.body.author, req.params.id
+            req.body.blog_title, req.body.blog_tagline, req.body.content, req.body.author, req.params.id
         ]
         addToDatabase(sql, data)
     } else {
@@ -553,7 +560,7 @@ app.post('/blog-edit:id', isLoggedIn, upload, (req, res, err) => {
 
 
 
-app.post('/deletejob:id', (req, res) => {
+app.post('/deletejob:id', isLoggedIn, (req, res) => {
     var id = req.params.id
     console.log(id)
     let sql = `DELETE FROM jobs 
@@ -571,7 +578,7 @@ app.post('/deletejob:id', (req, res) => {
     })
 });
 
-app.post('/deleteblog:id', (req, res) => {
+app.post('/deleteblog:id', isLoggedIn, (req, res) => {
     var id = req.params.id
     console.log(id)
     let sql = `DELETE FROM blog
@@ -595,30 +602,30 @@ app.post('/deleteblog:id', (req, res) => {
 
 
 
-app.post('/vid', (req, res) => {
-    upload2(req, res, (err) => {
-        if (err) {
-            res.redirect('back')
-        } else {
-            let sql = `UPDATE users 
-            SET 
-            video_path = ?
-            WHERE id = ?`;
+// app.post('/vid', (req, res) => {
+//     upload2(req, res, (err) => {
+//         if (err) {
+//             res.redirect('back')
+//         } else {
+//             let sql = `UPDATE users 
+//             SET 
+//             video_path = ?
+//             WHERE id = ?`;
 
-            let data = [
-                req.file.path, req.user.id
-            ];
+//             let data = [
+//                 req.file.path, req.user.id
+//             ];
 
-            // execute the UPDATE statement
-            connection.query(sql, data, (err, results) => {
-                if (err) {
-                    res.send(err);
-                }
-                res.redirect('back')
-            })
-        }
-    })
-});
+//             // execute the UPDATE statement
+//             connection.query(sql, data, (err, results) => {
+//                 if (err) {
+//                     res.send(err);
+//                 }
+//                 res.redirect('back')
+//             })
+//         }
+//     })
+// });
 
 
 app.post('/apply', withcv, (req, res) => {
@@ -665,12 +672,10 @@ app.post('/apply', withcv, (req, res) => {
 
         console.log('this far')
 
-
         let info = await transporter.sendMail({
             from: `<${req.body.email}>`,
             to: "admin@targeted-hr.com",
             subject: `Application - ${req.body.job_title}`,
-            cc: `${req.file.filename}`,
             html: output,
             attachments: [{
                 filename: cv.originalname,
@@ -689,8 +694,116 @@ app.post('/apply', withcv, (req, res) => {
 
 });
 
+app.post('/contact', (req, res) => {
+
+    if(!req.body.name || !req.body.email || !req.body.phone || !req.body.message){
+        return(
+        req.flash('error','Message Failed'),
+        res.redirect('back')
+        )
+    }
 
 
+    const output = `
+    <p>You have a contact request from '${req.body.name} </p>
+    <h3>Contact Details<h3>
+    <ul>
+        <li>Name: ${req.body.name}</li>
+        <li>Email: ${req.body.email}</li>
+        <li>Number: ${req.body.phone}</li>
+        <li>Subject: ${req.body.subject}</li>
+    <ul>
+
+    <h3> Message </h3>
+    <p>${req.body.message}</p>
+    `
+
+    async function main() {
+
+        let transporter = nodemailer.createTransport({
+            host: "az1-ss22.a2hosting.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: 'mailer@targeted-hr.com',
+                pass: 'admin1289'
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+
+        console.log('this far')
+
+        let info = await transporter.sendMail({
+            from: `<${req.body.email}>`,
+            to: "admin@targeted-hr.com",
+            subject: `Contact Request - ${req.body.subject}`,
+            html: output,
+
+        });
+
+
+    }
+    main().catch(console.error);
+    req.flash('success', 'Message Sent')
+    res.redirect('back')
+
+});
+
+
+function testmail(x, y) {
+
+
+    const output = `
+    <h3>You have a new job alert from Targeted HR</h3>
+    
+    <h3>Job Title - ${y}
+
+    <p>For full information please visit http://localhost:45000/jobs
+
+    `
+
+
+
+    var smtpTransport = nodemailer.createTransport({
+        host: "az1-ss22.a2hosting.com",
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'mailer@targeted-hr.com',
+            pass: 'admin1289'
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+
+    var mailOptions = {
+        to: x,
+        from: 'mailer@targeted-hr.com',
+        subject: 'Job Alert from Targeted-HR',
+        html: output
+    }
+    smtpTransport.sendMail(mailOptions, function (err) {
+        console.log('success', 'An e-mail has been sent');
+    });
+
+}
+
+
+function subMailer(y) {
+    let sql = `
+    SELECT email FROM 
+    subscription
+    `
+    connection.query(sql, (err, result) => {
+        var emailList = Array.from(result)
+        for (var i = 0; i < emailList.length; i++) {
+            testmail(emailList[i].email, y)
+        }
+    })
+}
 
 
 

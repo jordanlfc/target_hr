@@ -7,11 +7,35 @@
 
     </header>
 
-    <section id="content " class="mb-5">
+    <section id="content ">
 
         <div class="content-wrap jobs-table" style="padding-bottom: 0">
 
+
             <div class="container-fluid clearfix p-2">
+                <div class = "mb-2 d-flex justify-content-center" style="width:100%">
+                    
+                        <% if(error && error.length > 0) { %>
+
+                            <div class='alert alert-danger' role='alert'>
+                                <%= error %>
+                            </div>
+                            <% } %>
+                            <% if(success && success.length > 0) { %>
+                            <div class='alert alert-success' role='alert'>
+                                <%= success %>
+                            </div>
+            
+                            <% } %>
+
+                    <div class="">
+
+                        <a href="/jobs-post" class="btn btn-lg background-green">New Job</a>
+                        <a href="/blog-post" class="btn btn-lg background-green">New Blog</a>
+                        <a href="/new-admin" class="btn btn-lg background-green">New Admin</a>
+
+                    </div>
+                </div>
 
                 <div class="table-responsive">
                     <h2>Jobs Listed</h2>

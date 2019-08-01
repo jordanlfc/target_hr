@@ -16,8 +16,8 @@ module.exports = function (app, passport) {
         })
 
     app.post('/business_signup', passport.authenticate('business-signup', {
-        successRedirect: '/success',
-        failureRedirect: '/fail',
+        successRedirect: '/admin',
+        failureRedirect: '/admin',
         failureFlash: true
 
     }));

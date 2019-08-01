@@ -126,6 +126,10 @@ a img {
     
 }
 
+.exception{
+    list-style-type: circle
+}
+
 #first-about{
     height: 80vh;
 }
