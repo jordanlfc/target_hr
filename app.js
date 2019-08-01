@@ -9,7 +9,7 @@ const express = require("express"),
     uploader = multer(),
     withcv = uploader.single('file'),
     nodemailer = require("nodemailer");
-    async = require("async"),
+async = require("async"),
     crypto = require("crypto"),
     bcrypt = require('bcrypt-nodejs'),
     flash = require("connect-flash");
@@ -74,17 +74,12 @@ app.set("view engine", "ejs");
 
 //functions 
 
-
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
 
-    res.redirect('/');
+    res.redirect('/login');
 }
-
-
-
-
 
 //multer engine
 var storage = multer.diskStorage({
@@ -102,17 +97,102 @@ const upload = multer({
 }).single('file');
 
 
-
 require('./routes/routes.js')(app, passport);
-
-
 
 //routes
 
 app.get('/', (req, res) => {
-    res.render('index')
+
+    let iD = req.params.id
+
+    let sql = `
+    SELECT * FROM 
+    blog 
+    ORDER BY id 
+    DESC LIMIT 0, 1`
+
+    connection.query(sql, iD, (err, found) => {
+        if (err) {
+            req.flash('error', 'something went wrong')
+            res.redirect('back')
+        } else if (!found[0]) {
+            req.flash('error', 'something went wrong')
+            res.redirect('/')
+        } else {
+            console.log(found)
+            res.render('index', { blog: found })
+        }
+    })
 
 });
+
+app.get('/admin', (req, res) => {
+
+
+    let sql = `
+    SELECT * FROM
+    jobs
+    `
+    let sql2 = `
+    SELECT * FROM
+    blog
+    `
+
+    function blogFind(x){
+        connection.query(x, (err,found2) => {
+            if(err){
+            req.flash('error', 'something went wrong')
+            res.redirect('back')
+            } else if(!found2[0]){
+                res.render('admin', {
+                    blog:[],
+                    job:[]
+                })
+            } else {
+                res.render('admin', {
+                    blog:found2,
+                    job:[]
+                })
+            }
+        })
+    }
+    function blogFind2(x,y){
+        connection.query(x, (err,found2) => {
+            if(err){
+            req.flash('error', 'something went wrong')
+            res.redirect('back')
+            } else if(!found2[0]){
+                res.render('admin', {
+                    blog:[],
+                    job:y
+                })
+            } else {
+                res.render('admin', {
+                    blog:found2,
+                    job:y
+                })
+            }
+        })
+    }
+
+
+    connection.query(sql, (err, found) => {
+        if (err) {
+            req.flash('error', 'something went wrong')
+            res.redirect('back')
+        } else if (!found[0]) {
+            blogFind(sql2)
+        } else {
+            blogFind2(sql2,found)
+        }
+    })
+});
+
+
+
+
+
+
 
 
 app.get('/about', (req, res) => {
@@ -168,13 +248,13 @@ app.get('/jobs-single:id', (req, res) => {
 });
 
 
-app.get('/jobs-post', (req, res) => {
+app.get('/jobs-post', isLoggedIn, (req, res) => {
 
     res.render('postjob')
 
 });
 
-app.get('/edit-jobs:id', (req, res) => {
+app.get('/edit-jobs:id', isLoggedIn, (req, res) => {
 
 
     let iD = req.params.id
@@ -205,7 +285,24 @@ app.get('/edit-jobs:id', (req, res) => {
 
 app.get('/blog', (req, res) => {
 
-    res.render('blog')
+    let iD = req.params.id
+
+    let sql = `
+    SELECT * FROM
+    blog 
+    `
+
+    connection.query(sql, iD, (err, found) => {
+        if (err) {
+            req.flash('error', 'something went wrong')
+            res.redirect('back')
+        } else if (!found[0]) {
+            req.flash('error', 'something went wrong')
+            res.redirect('/')
+        } else {
+            res.render('blog', { blogs: found })
+        }
+    })
 
 });
 
@@ -234,6 +331,31 @@ app.get('/blog_:id', (req, res) => {
 
 });
 
+app.get('/blog-edit:id', isLoggedIn, (req, res) => {
+
+    let iD = req.params.id
+
+    let sql = `
+    SELECT * FROM
+    blog 
+    WHERE id = ? 
+    `
+
+    connection.query(sql, iD, (err, found) => {
+        if (err) {
+            req.flash('error', 'something went wrong')
+            res.redirect('back')
+        } else if (!found[0]) {
+            req.flash('error', 'something went wrong')
+            res.redirect('/')
+        } else {
+            res.render('blog-edit', { blog: found })
+        }
+    })
+
+
+})
+
 
 
 
@@ -243,18 +365,13 @@ app.get('/contact', (req, res) => {
 
 });
 
-app.get('/contact', (req, res) => {
-
-    res.render('contact')
-
-});
 
 
-app.get('/blog-post', (req,res) => {
+app.get('/blog-post', isLoggedIn, (req, res) => {
     res.render('blogpost')
 })
 
-app.get('/login', (req,res) => {
+app.get('/login', (req, res) => {
     res.render('login')
 })
 
@@ -293,7 +410,7 @@ app.post('/subscribe', (req, res) => {
     })
 });
 
-app.post('/new-job', (req, res) => {
+app.post('/new-job', isLoggedIn, (req, res) => {
     let sql = `
     INSERT INTO 
     jobs(job_title,job_salary,job_location,start_date,job_type, description, contact)
@@ -321,7 +438,7 @@ app.post('/new-job', (req, res) => {
     })
 })
 
-app.post('/edit-jobs:id', (req, res) => {
+app.post('/edit-jobs:id', isLoggedIn, (req, res) => {
     let sql = `
     UPDATE
     jobs 
@@ -362,17 +479,17 @@ app.post('/edit-jobs:id', (req, res) => {
 // })
 
 
-app.post('/blog-post', upload, (req, res, err) => {
+app.post('/blog-post', isLoggedIn, upload, (req, res, err) => {
 
-    let addToDatabase = (sql,data) => {
-        connection.query(sql,data,(err,result) => {
-            if(err){
-                return(
-                req.flash('error','something went wrong'),
-                res.redirect('back')
+    let addToDatabase = (sql, data) => {
+        connection.query(sql, data, (err, result) => {
+            if (err) {
+                return (
+                    req.flash('error', 'something went wrong'),
+                    res.redirect('back')
                 )
             }
-            req.flash('success','Blog post completed')
+            req.flash('success', 'Blog post completed')
             res.redirect('back')
         })
     }
@@ -383,19 +500,79 @@ app.post('/blog-post', upload, (req, res, err) => {
     VALUES(?,?,?,?,?)
     `
 
-    if(!req.file){
+    if (!req.file) {
         let data = [
-            req.body.blog_title, req.body.blog_tagline, null, req.body.content,req.body.author
+            req.body.blog_title, req.body.blog_tagline, null, req.body.content, req.body.author
         ]
-        addToDatabase(sql,data)
+        addToDatabase(sql, data)
     } else {
         console.log(req.file)
         let data = [
-            req.body.blog_title, req.body.blog_tagline, req.file.path, req.body.content,req.body.author
+            req.body.blog_title, req.body.blog_tagline, req.file.path, req.body.content, req.body.author
         ]
-        addToDatabase(sql,data)
+        addToDatabase(sql, data)
     }
 });
+
+
+app.post('/blog-edit:id', isLoggedIn, upload, (req, res, err) => {
+
+    let addToDatabase = (sql, data) => {
+        connection.query(sql, data, (err, result) => {
+            if (err) {
+                return (
+                    req.flash('error', 'something went wrong'),
+                    res.redirect('back')
+                )
+            }
+            req.flash('success', 'Blog post completed')
+            res.redirect('/blog')
+        })
+    }
+
+    if (!req.file) {
+        let sql = `UPDATE blog 
+            SET 
+            post_title = ?, post_title2 = ?, content_path = ?, content_data = ?
+            WHERE id = ?`;
+        let data = [
+            req.body.blog_title, req.body.tagline, req.body.content, req.body.author, req.params.id
+        ]
+        addToDatabase(sql, data)
+    } else {
+        let sql = `UPDATE blog 
+            SET 
+            post_title = ?, post_title2 = ?, picture_path = ? ,content_path = ?, content_data = ?
+            WHERE id = ?`;
+        let data = [
+            req.body.blog_title, req.body.tagline, req.file.path, req.body.content, req.body.author, req.params.id
+        ]
+        addToDatabase(sql, data)
+    }
+})
+
+
+
+app.post('/deletejob:id', (req, res) => {
+    var id = req.params.id
+    console.log(id)
+    let sql = `DELETE FROM jobs 
+    WHERE
+    id = ?`
+    let data = [
+        id
+    ]
+    connection.query(sql, data, (err, user, results) => {
+        if (err) {
+            console.log('hi')
+            res.send(results)
+        }
+        res.redirect('/admin')
+    })
+});
+
+
+
 
 
 
@@ -425,20 +602,10 @@ app.post('/vid', (req, res) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
 app.post('/apply', withcv, (req, res) => {
 
-    if(!req.file){
-        return(
+    if (!req.file) {
+        return (
             req.flash('error', 'You must upload your résumé'),
             res.redirect('back')
         )
@@ -467,10 +634,10 @@ app.post('/apply', withcv, (req, res) => {
         let transporter = nodemailer.createTransport({
             host: "az1-ss22.a2hosting.com",
             port: 465,
-            secure: true, 
+            secure: true,
             auth: {
-                user: 'mailer@targeted-hr.com', 
-                pass: 'admin1289' 
+                user: 'mailer@targeted-hr.com',
+                pass: 'admin1289'
             },
             tls: {
                 rejectUnauthorized: false
@@ -479,7 +646,7 @@ app.post('/apply', withcv, (req, res) => {
 
         console.log('this far')
 
-        
+
         let info = await transporter.sendMail({
             from: `<${req.body.email}>`,
             to: "admin@targeted-hr.com",
@@ -502,7 +669,6 @@ app.post('/apply', withcv, (req, res) => {
     res.redirect('back')
 
 });
-
 
 
 

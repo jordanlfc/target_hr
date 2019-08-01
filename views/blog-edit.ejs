@@ -1,0 +1,73 @@
+<%include partials/head1.ejs %>
+
+<%include partials/navbar.ejs %>
+
+<link rel="stylesheet" href="css/components/bs-filestyle.css" type="text/css" />
+
+<body>
+
+
+    <section id="content" class="standard-background">
+
+        <div class="row justify-content-center p-5">
+            <div class="col-lg-7 col-md-10">
+
+
+                <% if(error && error.length > 0) { %>
+
+                <div class='alert alert-danger' role='alert'>
+                    <%= error %>
+                </div>
+                <% } %>
+                <% if(success && success.length > 0) { %>
+                <div class='alert alert-success' role='alert'>
+                    <%= success %>
+                </div>
+
+                <% } %>
+
+                <div class="form-result"></div>
+
+                <div class="form-process css3-spinner">
+                    <div class="css3-spinner-double-bounce1"></div>
+                    <div class="css3-spinner-double-bounce2"></div>
+                </div>
+                <form action="/blog-edit<%=blog[0].id%>" enctype="multipart/form-data" method="post">
+                    <div class="form-group">
+                        <label>Blog Title</label>
+                        <input type="text" class="form-control" name="blog_title" value = "<%=blog[0].post_title%>">
+                    </div>
+                    <div class="form-group">
+                        <label>Tagline</label>
+                        <input type="text" class="form-control" name="blog_tagline" value = "<%=blog[0].post_title2%>">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Blog Text Content</label>
+                        <textarea class="form-control" name="content" rows="20" cols="20"><%=blog[0].content_path%></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Author</label>
+                        <input type="text" class="form-control" name="author" value = "<%=blog[0].content_data%>">
+                    </div>
+
+                    <div class="form-group bottommargin">
+								<label>Basic Select File</label><br>
+								<input id="input-1" type="file" class="file" data-show-preview="false" name = "file">
+							</div>
+
+                    <button type="submit" class="btn btn-success-custom" value="Submit" name="submit">Submit</button>
+                    <a class="btn btn-warning" href="/admin">Back</a>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+    <%include partials/footer.ejs %>
+
+    <%include partials/scripts.ejs %>
+
+    <script src="js/components/bs-filestyle.js"></script>
+
+</body>

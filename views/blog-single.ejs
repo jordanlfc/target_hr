@@ -8,7 +8,7 @@
 
 <!-- Content
 		============================================= -->
-		<section id="content">
+		<section id="content" class="standard-background">
 
                 <div class="content-wrap">
     
@@ -18,7 +18,7 @@
     
                             <!-- Single Post
                             ============================================= -->
-                            <div class="entry clearfix">
+                            <div class="entry clearfix border-bottom-custom">
     
                                 <!-- Entry Title
                                 ============================================= -->
@@ -29,18 +29,25 @@
                                 <!-- Entry Meta
                                 ============================================= -->
                                 <ul class="entry-meta clearfix">
-                                    <li><i class="icon-calendar3"></i><%=blog[0].post_create_date%></li>
+                                    <li class="date-of"><i class="icon-calendar3"></i><%=blog[0].post_create_date%></li>
                                 </ul><!-- .entry-meta end -->
     
                                 <!-- Entry Image
                                 ============================================= -->
+                                <%if(blog[0].picture_path){ %>
                                 <div class="entry-image bottommargin">
-                                    <a href="#"><img src="images/blog/full/10.jpg" alt="Blog Single"></a>
+                                    <img src="<%=blog[0].picture_path.slice(6)%>" alt="Blog Single">
                                 </div><!-- .entry-image end -->
+                           <% } %>
     
                                 <!-- Entry Content
                                 ============================================= -->
-                                <div class="entry-content notopmargin white-space-pre"><%=blog[0].content_path%><div class="clear"></div></div>
+                                <div style="font-size: 1.3em" class="entry-content notopmargin white-space-pre"><%=blog[0].content_path%><div class="clear"></div></div>
+
+
+                                <div class="entry-meta white-space-pre mt-5">Post by <%=blog[0].content_data%><div class="clear"></div></div>
+
+
                             </div><!-- .entry end -->
     
     
@@ -52,6 +59,26 @@
     
             </section><!-- #content end -->
 
+<%include partials/footer%>
 <%include partials/scripts%>
+
+
+<script>
+
+        let dateChange = Array.from(document.querySelectorAll('.date-of'))
+
+        function changer(x) {
+            for (var i = 0; i < x.length; i++) {
+                x[i].innerText = x[i].innerText.slice(0, 15)
+            }
+            return x
+        }
+
+        changer(dateChange)
+
+
+    </script>
+
+
 
         </body>

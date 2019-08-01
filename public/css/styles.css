@@ -38,6 +38,11 @@ ul{
     background-color: var(--ui-logo-green) !important
 }
 
+
+.border-bottom-custom{
+    border-bottom: 2px solid var(--ui-logo-green);
+}
+
 .button-margin{
     margin-right:auto;
     margin-left:1em;

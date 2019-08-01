@@ -25,6 +25,15 @@
                     <li class="nav-item m-4">
                         <a class="nav-link" href="/contact">Contact</a>
                     </li>
+
+                    <%if (currentUser){%>
+                    <li class="nav-item m-4">
+                        <a class="nav-link" href="/admin">Admin</a>
+                    </li>
+                    <li class="nav-item m-4">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                    <% } %>
                 </ul>
             </div>
         </nav>
@@ -54,27 +63,28 @@
                             <h4 class="card-title mb-5 text-black">Subscribe to our latest jobs</h4>
 
                             <% if(error && error.length > 0) { %>
-				
-                                <div class='alert alert-danger' role='alert'>
-                                    <%= error %>
-                                </div>
-                                <% } %>
-                                <% if(success && success.length > 0) { %>
-                                <div class='alert alert-success' role='alert'>
-                                    <%= success %>
-                                </div>
-                            
+
+                            <div class='alert alert-danger' role='alert'>
+                                <%= error %>
+                            </div>
+                            <% } %>
+                            <% if(success && success.length > 0) { %>
+                            <div class='alert alert-success' role='alert'>
+                                <%= success %>
+                            </div>
+
                             <% } %>
 
 
-                            <form class="mb-2 row justify-content-around change-form" action="/subscribe" method ="post">
+                            <form class="mb-2 row justify-content-around change-form" action="/subscribe" method="post">
                                 <input class="form-control1 form-control-custom mb-3 col-5 " type="text" name="name"
                                     id="fullname" placeholder="Full Name">
                                 <input class="form-control1 form-control-custom mb-3 col-5" type="email" name="email"
                                     id="email" placeholder="E-Mail">
-                                    <button type ="submit" class="btn btn-primary btn-custom mt-4 button-margin">Subscribe</a>
+                                <button type="submit"
+                                    class="btn btn-primary btn-custom mt-4 button-margin">Subscribe</a>
                             </form>
-                            
+
 
                         </div>
                     </div>
@@ -85,13 +95,44 @@
                             Latest Blog Post
                         </div>
                         <div class="card-body">
-                            <h4 class="card-title mb-5 text-black"><a class="text-black" href="#">Blog Title</h4>
+                            <h4 class="card-title mb-5 text-black"><a class="text-black" href="/blog_<%=blog[0].id%>">
+
+                                    <% if(blog[0].post_title) { %>
+
+                                    <%if (blog[0].post_title.length <= 30){ %>
+                                    <%=blog[0].post_title%></h4>
+                            <% } else { %>
+
+
+                            <%=blog[0].post_title.slice(0,30)+' ....'%></h4>
+                            <% } %>
+                            <% } %>
                             </a>
+                            
+                            <% if(blog[0].post_title2) { %>
 
-                            <p class="margin-b-2 text-black">Tagline or first line of the blog</p>
+                            <p class="margin-b-2 text-black">
+
+                               <% if(blog[0].post_title2.length <= 50){ %>
+                                    <%=blog[0].post_title2%>
+                             <%   } else { %>
+                                    <%=blog[0].post_title2.slice(0,50)+' ....'%>
+                             <%  } %>
 
 
-                            <a href="#" class="btn btn-primary btn-custom mt-4">Blog</a>
+                                 
+
+        
+                            </p>
+                            <%  } else { %>
+
+                                <p>hi</p>
+                                <% } %>
+
+                                
+
+
+                            <a href="/blog" class="btn btn-primary btn-custom mt-4">Blog</a>
 
                         </div>
                     </div>
