@@ -407,7 +407,6 @@ app.post('/subscribe', (req, res) => {
             req.flash('error', 'Sign up failed. Please try again.')
             res.redirect('back')
         }
-        console.log(result)
         req.flash('success', 'subscribed')
         res.redirect('back')
     })
@@ -471,7 +470,6 @@ app.post('/edit-jobs:id', isLoggedIn, (req, res) => {
             req.flash('error', 'Post failed, please try again')
             res.redirect('back')
         }
-        console.log(result)
         req.flash('success', 'Job Posted')
         res.redirect('/admin')
     })
@@ -513,7 +511,6 @@ app.post('/blog-post', isLoggedIn, upload, (req, res, err) => {
         ]
         addToDatabase(sql, data)
     } else {
-        console.log(req.file)
         let data = [
             req.body.blog_title, req.body.blog_tagline, req.file.path, req.body.content, req.body.author
         ]
@@ -562,7 +559,6 @@ app.post('/blog-edit:id', isLoggedIn, upload, (req, res, err) => {
 
 app.post('/deletejob:id', isLoggedIn, (req, res) => {
     var id = req.params.id
-    console.log(id)
     let sql = `DELETE FROM jobs 
     WHERE
     id = ?`
@@ -571,7 +567,6 @@ app.post('/deletejob:id', isLoggedIn, (req, res) => {
     ]
     connection.query(sql, data, (err, user, results) => {
         if (err) {
-            console.log('hi')
             res.send(results)
         }
         res.redirect('/admin')
@@ -580,7 +575,6 @@ app.post('/deletejob:id', isLoggedIn, (req, res) => {
 
 app.post('/deleteblog:id', isLoggedIn, (req, res) => {
     var id = req.params.id
-    console.log(id)
     let sql = `DELETE FROM blog
     WHERE
     id = ?`
@@ -638,7 +632,6 @@ app.post('/apply', withcv, (req, res) => {
     }
 
     const cv = req.file;
-    console.log(cv)
 
 
     const output = `
@@ -653,7 +646,6 @@ app.post('/apply', withcv, (req, res) => {
     
     `
 
-    console.log(output)
 
     async function main() {
 
@@ -670,7 +662,6 @@ app.post('/apply', withcv, (req, res) => {
             }
         });
 
-        console.log('this far')
 
         let info = await transporter.sendMail({
             from: `<${req.body.email}>`,
@@ -733,7 +724,6 @@ app.post('/contact', (req, res) => {
             }
         });
 
-        console.log('this far')
 
         let info = await transporter.sendMail({
             from: `<${req.body.email}>`,

@@ -95,7 +95,9 @@ a img {
     margin-left:-20px
 }
 
-
+.text-green{
+    color:var(--ui-logo-green) !important
+}
 
 #cover {
 
@@ -109,6 +111,12 @@ a img {
     margin-top:-7em;
     z-index: 1;
     overflow: hidden;
+}
+
+@media(max-width:991px){
+    #cover{
+        height:150vh
+    }
 }
 
 .custom-bar{
