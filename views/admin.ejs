@@ -28,7 +28,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                           <% if(job){ %>
+                            <% if(job){ %>
 
 
                             <% job.map(job => { %>
@@ -44,14 +44,14 @@
                                 </td>
 
                                 <td>
-                                        <form style="margin:0" action="/deletejob<%=job.id%>" method="post">
-                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
-                                    </td>
+                                    <form style="margin:0" action="/deletejob<%=job.id%>" method="post">
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </td>
 
                             </tr>
                             <% }) %>
-                      <%  }  %>
+                            <%  }  %>
                         </tbody>
                     </table>
                 </div>
@@ -73,7 +73,8 @@
                                 <th>Post Title</th>
                                 <th>Tagline</th>
                                 <th>Date</th>
-                                <th>Profile</th>
+                                <th>Post</th>
+                                <th>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,6 +85,11 @@
                                 <td><%=blog.post_title2%></td>
                                 <td><%=blog.post_create_date%></td>
                                 <td><a href="/blog_<%=blog.id%>">View</a> / <a href="/blog-edit<%=blog.id%>">Edit</a>
+                                </td>
+                                <td>
+                                    <form style="margin:0" action="/deleteblog<%=blog.id%>" method="post">
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
                                 </td>
 
                             </tr>

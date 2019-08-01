@@ -103,6 +103,7 @@ require('./routes/routes.js')(app, passport);
 
 app.get('/', (req, res) => {
 
+
     let iD = req.params.id
 
     let sql = `
@@ -116,8 +117,7 @@ app.get('/', (req, res) => {
             req.flash('error', 'something went wrong')
             res.redirect('back')
         } else if (!found[0]) {
-            req.flash('error', 'something went wrong')
-            res.redirect('/')
+            res.render('index', {blog:[]})
         } else {
             console.log(found)
             res.render('index', { blog: found })
@@ -567,6 +567,25 @@ app.post('/deletejob:id', (req, res) => {
             console.log('hi')
             res.send(results)
         }
+        res.redirect('/admin')
+    })
+});
+
+app.post('/deleteblog:id', (req, res) => {
+    var id = req.params.id
+    console.log(id)
+    let sql = `DELETE FROM blog
+    WHERE
+    id = ?`
+    let data = [
+        id
+    ]
+    connection.query(sql, data, (err, user, results) => {
+        if (err) {
+            req.flash('error', 'Failed')
+            res.redirect('back')
+        }
+        req.flash('Success', 'Post Deleted')
         res.redirect('/admin')
     })
 });

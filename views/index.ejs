@@ -95,9 +95,15 @@
                             Latest Blog Post
                         </div>
                         <div class="card-body">
+                            
+                            <% if(blog.length < 1 ){ %>
+                                <h4 class="card-title mb-5 text-black"><a class="text-black" href="#">Coming Soon</a>
+                          <%  } else { %>
+                        
+                            
                             <h4 class="card-title mb-5 text-black"><a class="text-black" href="/blog_<%=blog[0].id%>">
 
-                                    <% if(blog[0].post_title) { %>
+                                    
 
                                     <%if (blog[0].post_title.length <= 30){ %>
                                     <%=blog[0].post_title%></h4>
@@ -109,7 +115,7 @@
                             <% } %>
                             </a>
                             
-                            <% if(blog[0].post_title2) { %>
+                            <% if(blog.post_title2) { %>
 
                             <p class="margin-b-2 text-black">
 
