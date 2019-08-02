@@ -21,12 +21,12 @@ const port = process.env.PORT || 45000;
 require('./config/passport')(passport);
 
 //database 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'admin',
-    database: 'target_database'
-})
+// const connection = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: 'admin',
+//     database: 'target_database'
+// })
 
 
 //app uses
