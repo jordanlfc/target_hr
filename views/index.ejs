@@ -101,7 +101,7 @@
                                 <%  } else if(blog[0].post_title) {  %>
 
                                 <h4 class="card-title mb-5 text-black"><a class="text-black"
-                                        href="#"><%=blog[0].post_title%></a>
+                                        href="/blog_<%=blog[0].id%>"><%=blog[0].post_title%></a>
                                     <% } %>
 
 
@@ -113,7 +113,7 @@
 
                                     <%  } else if(blog[0].post_title2) {  %>
 
-                                    <p class="margin-b2 text-black"><%=blog[0].post_title2%></p>
+                                    <p class="margin-b2 text-black" style="font-size:0.5639em"><%=blog[0].post_title2%></p>
                                   <%  }  %>
 
 

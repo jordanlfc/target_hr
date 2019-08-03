@@ -118,6 +118,11 @@ a img {
         height:150vh
     }
 }
+@media(max-width:400px){
+    #cover{
+        height:200vh
+    }
+}
 
 .custom-bar{
     min-height: 6em;
@@ -159,6 +164,11 @@ a img {
 #jobs-image-table{
     background-size: contain;
     background-position: center;
+}
+#jobs-image-section{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat
 }
 
 #job-single-section {
